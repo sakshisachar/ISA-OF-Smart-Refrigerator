@@ -1,0 +1,89 @@
+MOVI R16 3
+MOVI R14 10
+MOVI R05 150 
+MOVI R11 0
+MOVI R07 100
+MOVI R06 10 	
+MOVI R12 0
+MAIN:
+IN R03
+CMPI R03 1
+MSF		
+JEQ checkpassword
+CMPI R03 2
+JNQ L0
+DRPN
+L0:
+CMPI R03 3
+MSF
+JEQ setTemp
+CMPI R03 4
+MSF 
+JEQ addLoad
+CMPI R03 5
+JNQ L1
+ADW
+L1:
+CMPI R03 6
+MSF
+JEQ precisefill
+CMPI R03 7
+MSF
+JEQ defrost
+CMPI R03 8
+JNQ L2
+FLST
+L2:
+CMPI R03 9
+JNQ L3
+ENGY
+L3:
+CMPI R03 10
+JNQ L4
+DRCL
+L4:
+IN R31
+CMPI R31 1
+JEQ MAIN
+HLT
+addLoad:
+CMP R11 R05 						
+JLT L4
+RET
+L4:
+IN    R01 
+CMP   R01       R05
+JGT   L4
+ADD   R11       R01
+RET
+setTemp:     						
+IN  R18
+CMP R18 R14
+JGT setTemp
+MOV R16 R18
+RET
+checkpassword:
+IN    R00 
+CMP   R00     R07
+JNQ  checkpassword
+RET			
+precisefill:
+IN     R02 
+CMP    R02      R06
+JGT precisefill
+MOVI R13 0
+L6:
+IN R13
+CMP  R13  R02
+JNQ L6
+SUB   R06  R02
+RET
+defrost:
+IN R19
+MOVI  R20  60
+MUL  R19  R20
+L12:
+ADDI R12 1 
+CMP R12 R19
+JNQ L12
+RET

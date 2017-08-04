@@ -1,0 +1,83 @@
+MOV1   150     R05						//storage capacity 
+MOV1   10	     R06						//water container capacity 					
+MOV1	 100	     R07 						//Password between 0-255
+MOV1   5       R08						//door timer (in minutes)
+MOV1   0       R11						//set current load zero
+SETTMR							//set timer ie will initialise register R12 with 0
+MOV1   10      R14						//temperature
+MOV1   0       R15						//initial temperature of freezer
+MOV1   3       R16						//initial temperature of refrigerator
+L1:
+IN	 1	     R00						//input via port 1
+CMP   R00	     R07
+JNQ  L1
+DOPN 1							//value of compartment and open door 
+L2:							
+INC R12
+L3: 
+CMP   R11       R05						
+JLT L4
+CMP  R12        R08						//checks time 
+JLT  L2
+DCLS
+SETTMR
+JMP L5
+L4:
+IN    2         R01						//input via port 2 (load)
+CMP   R01       R05
+JGT   L2
+ADD   R01       R11					     //store in R11
+DCLS									// door close
+SETTMR								//set timer
+JMP L5
+L5:
+IN  	3       	R02						//take vol of water required via port 3
+CMP 	RO2 	     R06
+JGT  L5
+JMP  L6
+MOV1	 0  	     R13						//R13 represents the container
+L6:
+INC R13
+CMP     R13      R02
+JNQ L6
+SUB   R02        R06
+DOPN 
+DCLS
+L7:
+INTEMP   R17     R18					//take input as compartment and temperature
+MOV1    1        R19					//compartment 1 means freezer 
+CMP     R19      R17					
+JEQ 	   L8         
+CMP    R18      R14
+JEQ    L9
+JMP    L10
+L9:
+MOV     R16      R18
+JMP     L11
+L8:
+CMP  R18      R14
+JLT  L10
+JMP  L11
+L10
+MOV  R15	 R18
+SETTMR
+L11:
+IN     4        R19								//set time for defrost via port 4 in hours
+MOV    60       R20
+MUL    R20       R19
+L12:
+INC   R12
+MSF   R09
+CAL  L13
+CMP  R12      R19
+JNQ L12
+JMP L14
+L13:
+MOV  R21  R19                                         //display time in hours
+DIV  R20  21
+OUT  0    R21
+RET 	   R09
+L14:
+HLT
+
+

@@ -1,0 +1,19 @@
+R00					//user enters the password(input)
+R01					//how much user wants to store (input)
+R02					//take vol of water required (input)
+R03					//menu driven choice(input)
+R05 150 				//storage capacity 
+R06 10					//water container capacity
+R07 100 		     		//Password between 0-255
+R11 0					//set current load zero
+R12 0   				//set timer ie will initialise registeR R12 with 0
+R13					//R13 represents the container
+R14 10					//maximum range of temp in refrigerator 
+R16 3					//initial temperature of refrigerator
+R17 15					//door timer (in min )
+R18					//User set the temp of the refrigerator(input) 
+R19     				//set time for defrost in hours(input)
+R20 60					//changing hours in minutes
+R25 0					//door close
+R25 1					//OPEN DOOR Set R25 to 1
+R26					//power usage in  a day (stored)
